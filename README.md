@@ -11,14 +11,31 @@ Before proceeding, ensure you have the following:
 
 ## UNS Cloud Links
 
-- [Guardian](https://guardian.universalnameservice.com)
-- [Gatekeeper](https://gatekeeper.universalnameservice.com)
-- [Gateway package](https://www.npmjs.com/package/@unsproject/service-gateway)
-- [Demo](https://demo.universalnameservice.com)
+- <a href="https://guardian.universalnameservice.com" target="_blank">Guardian</a>
+- <a href="https://gatekeeper.universalnameservice.com" target="_blank">Gatekeeper</a>
+- <a href="https://www.npmjs.com/package/@unsproject/service-gateway" target="_blank">Gateway package</a>
+- <a href="https://demo.universalnameservice.com" target="_blank">Demo</a>
 
-## 1. Database Tables
+## 1. Install the Gateway
 
-You will need to implemnt the following tables into your database.
+Using npm, install the following dependencies on your Express server.
+
+```
+npm install @unsproject/service-gateway @unsproject/common
+```
+
+## 2. Implement the DBContext interface
+
+Use DBContext from @unsproject/service-gateway/dist/api
+
+- `async createTicket(ticket: AuthTicket): Promise<AuthTicket>` - Inserts the **Ticket** into the database
+- `async getTicket(nonce: string): Promise<AuthTicket>` - Return the **Ticket** via its nonce
+- `async updateTicketToClaimed(ticket: AuthTicket): Promise<AuthTicket>` - Updates the status of a given **Ticket** to CLAIMED and saves it.
+- `async updateTicketToAuthorized(ticket: AuthTicket,serviceUserId: string):Promise<AuthTicket>` - Updates the status of a given **Ticket** to AUTHORIZED and saves it.
+
+## 3. Database Tables
+
+You will need to implement the following tables into your database.
 
 - `Ticket` Table:
 
@@ -59,23 +76,6 @@ You will need to implemnt the following tables into your database.
   | ...           |         |          |             |                          |
 
   - This table is how you should extend your User table so you can reference the tickets with the `User`
-
-## 2. Install the Gateway
-
-Using npm, install the following dependencies on your Express server.
-
-```
-npm install @unsproject/service-gateway @unsproject/common
-```
-
-## 3. Implement the DBContext interface
-
-Use DBContext from @unsproject/service-gateway/dist/api
-
-- `async createTicket(ticket: AuthTicket): Promise<AuthTicket>` - Inserts the **Ticket** into the database
-- `async getTicket(nonce: string): Promise<AuthTicket>` - Return the **Ticket** via its nonce
-- `async updateTicketToClaimed(ticket: AuthTicket): Promise<AuthTicket>` - Updates the status of a given **Ticket** to CLAIMED and saves it.
-- `async updateTicketToAuthorized(ticket: AuthTicket,serviceUserId: string):Promise<AuthTicket>` - Updates the status of a given **Ticket** to AUTHORIZED and saves it.
 
 ## 4. Registering routes
 
