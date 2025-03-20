@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { AuthTicket } from "@uns/common";
+import { AuthTicket } from "@unsproject/common";
 
 const authTicketSchema = new Schema<AuthTicket>(
   {
