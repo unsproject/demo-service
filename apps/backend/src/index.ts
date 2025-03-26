@@ -1,8 +1,8 @@
-import express, { Express } from 'express';
+import express, { Express, Response, Request, NextFunction } from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
 import path from 'path';
-import { DBImplementation } from '../db';
+import { DBImplementation } from './db';
 import cors from 'cors';
 import apiRouter from './apiRouter';
 import { gatewayApp } from '@unsproject/service-gateway/dist/api';
@@ -36,6 +36,10 @@ app.use(
 );
 
 app.use('/api', apiRouter);
+
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+	res.status(500).json({ error: error.message });
+});
 
 connection.once('open', () => {
 	console.log('MongoDB connection established successfully');

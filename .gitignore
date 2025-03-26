@@ -2,6 +2,7 @@
 node_modules
 .test-reports
 .DS_Store
+.env
 dist
 build
 .husky
