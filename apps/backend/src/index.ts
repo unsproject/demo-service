@@ -1,5 +1,4 @@
 import express, { Express } from 'express';
-import dotenv from 'dotenv';
 import http from 'http';
 import mongoose from 'mongoose';
 import path from 'path';
@@ -7,8 +6,6 @@ import { DBImplementation } from '../db';
 import cors from 'cors';
 import apiRouter from './apiRouter';
 import { gatewayApp } from '@unsproject/service-gateway/dist/api';
-
-dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
