@@ -56,5 +56,5 @@ jobs:
         run: |
           sudo cp -R ./* /home/admin/services/demo-service/dist
           cd /home/admin/services/demo-service
-          dcdn
-          dcupd
+          docker compose down
+          docker compose up -d
