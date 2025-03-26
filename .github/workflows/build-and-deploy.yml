@@ -1,12 +1,15 @@
 name: Deploy on Merge
 
 on:
-  push:
+  pull_request:
+    types: [closed]
+    branches: [main]
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -52,7 +55,7 @@ jobs:
         with:
           name: dist
 
-      - name: Move Artifact
+      - name: Apply Artifact
         run: |
           sudo cp -R ./* /home/admin/services/demo-service/dist
           cd /home/admin/services/demo-service
