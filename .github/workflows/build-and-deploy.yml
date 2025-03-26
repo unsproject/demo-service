@@ -54,4 +54,7 @@ jobs:
 
       - name: Move Artifact
         run: |
-          yes | sudo cp -R ./* /home/admin/services/demo-service/dist
+          sudo cp -R ./* /home/admin/services/demo-service/dist
+          cd /home/admin/services/demo-service
+          dcdn
+          dcupd
