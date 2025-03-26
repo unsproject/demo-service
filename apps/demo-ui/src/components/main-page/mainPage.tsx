@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { AppHeader } from '../appHeader';
 import { Page } from '../page';
 import classes from './mainPage.module.scss';
@@ -37,7 +37,21 @@ const loginOptions = [
 export const MainPage: FC = () => {
 	const { isLoggedIn, userData, logOut } = useUser();
 	const [items, setItems] = useState<Message[]>([]);
-	const fetchItems = async () => {
+
+	const [newTitle, setNewTitle] = useState<string>('');
+	const [newText, setNewText] = useState<string>('');
+
+	const [touchedTitle, setTouchedTitle] = useState(false);
+	const [touchedText, setTouchedText] = useState(false);
+
+	const handleClearInputs = useCallback(() => {
+		setNewTitle('');
+		setNewText('');
+		setTouchedText(false);
+		setTouchedTitle(false);
+	}, []);
+
+	const fetchItems = useCallback(async () => {
 		if (isLoggedIn) {
 			const response = await fetch('/api/getMessages', {
 				method: 'POST',
@@ -66,16 +80,11 @@ export const MainPage: FC = () => {
 			});
 			setItems(sortedData);
 		}
-	};
+	}, [setItems, isLoggedIn, userData]);
+
 	useEffect(() => {
 		fetchItems();
-	}, [userData]);
-
-	const [newTitle, setNewTitle] = useState<string>('');
-	const [newText, setNewText] = useState<string>('');
-
-	const [touchedTitle, setTouchedTitle] = useState(false);
-	const [touchedText, setTouchedText] = useState(false);
+	}, [userData, fetchItems]);
 
 	const handleTitleBlur = () => {
 		setTouchedTitle(true);
@@ -84,7 +93,7 @@ export const MainPage: FC = () => {
 	const handleTextBlur = () => {
 		setTouchedText(true);
 	};
-	const handleAddEntry = async () => {
+	const handleAddEntry = useCallback(async () => {
 		if (newTitle && newText) {
 			if (isLoggedIn && userData) {
 				const response = await fetch('/api/addMessage', {
@@ -109,13 +118,8 @@ export const MainPage: FC = () => {
 			if (!newTitle) setTouchedTitle(true);
 			if (!newText) setTouchedText(true);
 		}
-	};
-	const handleClearInputs = () => {
-		setNewTitle('');
-		setNewText('');
-		setTouchedText(false);
-		setTouchedTitle(false);
-	};
+	}, [newTitle, newText, isLoggedIn, userData, fetchItems, handleClearInputs]);
+
 	const handleLogin = (attestationType: string) => {
 		const currentUrl = new URL(window.location.href);
 		const url = new URL('/uns-service-gateway/', window.location.origin);
