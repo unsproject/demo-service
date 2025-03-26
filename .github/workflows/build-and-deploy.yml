@@ -42,3 +42,15 @@ jobs:
         with:
           name: dist
           path: dist
+
+  place-on-server:
+    runs-on: [self-hosted, demo-builder]
+    steps:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+
+      - name: Move Artifact
+        run: |
+          yes | sudo cp -R dist/* /home/admin/services/demo-service/dist
